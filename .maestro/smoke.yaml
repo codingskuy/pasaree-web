@@ -1,0 +1,13 @@
+# Smoke web lapak: beranda dan halaman draf termuat. Selector: data-testid.
+url: ${WEB_URL}
+---
+- launchApp
+- assertVisible:
+    id: beranda-judul
+- assertVisible:
+    id: beranda-lapak
+- openLink: ${WEB_URL}/lapak/produk/baru
+- assertVisible:
+    id: draf-judul-halaman
+- assertVisible:
+    id: ajukan-kurasi

@@ -1,0 +1,39 @@
+# Alur bisnis utama (cabang validasi): isi draf produk -> Ajukan Kurasi ditahan karena kategori kosong. Butuh harness (mock API + sesi): .maestro/jalankan.sh
+url: ${WEB_URL}/lapak/produk/baru?lapak_id=01J0000000000000000000001
+---
+- launchApp
+- waitForAnimationToEnd
+- retry:
+    maxRetries: 3
+    commands:
+      - assertVisible:
+          id: draf-judul-halaman
+      - tapOn:
+          id: input-judul
+      - inputText: Keripik Tempe Pedas 250 g
+      - tapOn:
+          id: input-deskripsi
+      - inputText: Keripik tempe renyah buatan rumahan dengan cabai pilihan.
+      - tapOn:
+          id: tambah-varian
+      - tapOn:
+          id: varian-0-nama
+      - inputText: Original
+      - tapOn:
+          id: varian-0-sku
+      - inputText: KT-250
+      - tapOn:
+          id: varian-0-harga
+      - inputText: '25000'
+      - tapOn:
+          id: varian-0-stok
+      - inputText: '10'
+      - tapOn:
+          id: varian-0-berat
+      - inputText: '300'
+- tapOn:
+    id: ajukan-kurasi
+# Kategori sengaja belum dipilih: <select> native tidak dapat dioperasikan Maestro web (lihat ADR-0004).
+# Validasi sisi klien harus menahan pengajuan dan menampilkan galat kolom.
+- assertVisible:
+    id: galat-kategori

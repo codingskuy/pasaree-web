@@ -1,0 +1,53 @@
+name: Schemathesis (manual)
+
+# Hanya manual: uji properti terhadap backend yang SUDAH berjalan di alamat tertentu.
+on:
+  workflow_dispatch:
+    inputs:
+      base_url:
+        description: Alamat backend yang diuji (mis. https://staging.pasaree.example). Jangan produksi.
+        required: true
+        type: string
+      spec_ref:
+        description: Cabang/tag/sha pasaree-backend-service sumber docs/api/openapi.yaml
+        required: false
+        default: main
+        type: string
+      max_examples:
+        description: Contoh per operasi
+        required: false
+        default: '25'
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  schemathesis:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: Coding-Skuy/pasaree-backend-service
+          ref: ${{ inputs.spec_ref }}
+          path: backend
+          token: ${{ secrets.BACKEND_REPO_TOKEN || github.token }}
+          sparse-checkout: docs/api
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install 'schemathesis>=4,<5'
+      - name: Jalankan uji properti
+        env:
+          BASE_URL: ${{ inputs.base_url }}
+          SPEC: backend/docs/api/openapi.yaml
+          MAX_EXAMPLES: ${{ inputs.max_examples }}
+          TOKEN: ${{ secrets.SCHEMATHESIS_TOKEN }}
+        run: ./contract/schemathesis.sh
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: laporan-schemathesis
+          path: contract/laporan/

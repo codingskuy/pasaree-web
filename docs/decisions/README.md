@@ -10,3 +10,4 @@ Cara menambah ADR:
 Daftar:
 
 - [ADR-0001 — Fondasi teknis](./ADR-0001-fondasi-teknis.md)
+- [ADR-0003 — Uji properti dengan Schemathesis](./ADR-0003-uji-properti-schemathesis.md)

@@ -1,0 +1,454 @@
+{
+  "consumer": {
+    "name": "pasaree-web"
+  },
+  "interactions": [
+    {
+      "description": "ajukan kurasi",
+      "pending": false,
+      "providerStates": [
+        {
+          "name": "produk draf 01J0000000000000000000003 lolos cek otomatis"
+        }
+      ],
+      "request": {
+        "headers": {
+          "Authorization": [
+            "Bearer token-uji"
+          ]
+        },
+        "method": "POST",
+        "path": "/web/produk/01J0000000000000000000003/ajukan-kurasi"
+      },
+      "response": {
+        "body": {
+          "content": {
+            "estimasi_sla": "2026-10-06T17:00:00Z",
+            "status": "MENUNGGU_KURASI"
+          },
+          "contentType": "application/json",
+          "encoded": false
+        },
+        "headers": {
+          "Content-Type": [
+            "application/json"
+          ]
+        },
+        "matchingRules": {
+          "body": {
+            "$.estimasi_sla": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "format": "yyyy-MM-dd'T'HH:mm:ss'Z'",
+                  "match": "datetime"
+                }
+              ]
+            }
+          }
+        },
+        "status": 200
+      },
+      "type": "Synchronous/HTTP"
+    },
+    {
+      "description": "ajukan kurasi ditolak cek otomatis",
+      "pending": false,
+      "providerStates": [
+        {
+          "name": "produk draf 01J0000000000000000000004 gagal cek otomatis"
+        }
+      ],
+      "request": {
+        "headers": {
+          "Authorization": [
+            "Bearer token-uji"
+          ]
+        },
+        "method": "POST",
+        "path": "/web/produk/01J0000000000000000000004/ajukan-kurasi"
+      },
+      "response": {
+        "body": {
+          "content": {
+            "kode": "VALIDASI_GAGAL",
+            "pesan": "Cek otomatis gagal."
+          },
+          "contentType": "application/json",
+          "encoded": false
+        },
+        "headers": {
+          "Content-Type": [
+            "application/json"
+          ]
+        },
+        "matchingRules": {
+          "body": {
+            "$.pesan": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          }
+        },
+        "status": 422
+      },
+      "type": "Synchronous/HTTP"
+    },
+    {
+      "description": "buat draf produk",
+      "pending": false,
+      "providerStates": [
+        {
+          "name": "lapak milik akun ada"
+        }
+      ],
+      "request": {
+        "body": {
+          "content": {
+            "deskripsi": "Sambal bawang buatan rumahan dengan cabai pilihan, tanpa pengawet, tahan 3 bulan.",
+            "judul": "Sambal Bawang Mbok D 150 g",
+            "kategori_kode": "bumbu-dapur",
+            "lapak_id": "01J0000000000000000000001",
+            "tag": [
+              "pedas"
+            ]
+          },
+          "contentType": "application/json",
+          "encoded": false
+        },
+        "headers": {
+          "Authorization": [
+            "Bearer token-uji"
+          ],
+          "Content-Type": [
+            "application/json"
+          ],
+          "Idempotency-Key": [
+            "6f1c2c1e-6c1e-4c2e-9a3b-2f1c2c1e6c1e"
+          ]
+        },
+        "method": "POST",
+        "path": "/web/produk/draf"
+      },
+      "response": {
+        "body": {
+          "content": {
+            "produk_id": "01J0000000000000000000002",
+            "status": "DRAF"
+          },
+          "contentType": "application/json",
+          "encoded": false
+        },
+        "headers": {
+          "Content-Type": [
+            "application/json"
+          ]
+        },
+        "matchingRules": {
+          "body": {
+            "$.produk_id": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          }
+        },
+        "status": 201
+      },
+      "type": "Synchronous/HTTP"
+    },
+    {
+      "description": "daftar lapak saya",
+      "pending": false,
+      "providerStates": [
+        {
+          "name": "akun produsen memiliki satu lapak aktif"
+        }
+      ],
+      "request": {
+        "headers": {
+          "Authorization": [
+            "Bearer token-uji"
+          ]
+        },
+        "method": "GET",
+        "path": "/web/lapak-saya"
+      },
+      "response": {
+        "body": {
+          "content": {
+            "data": [
+              {
+                "id": "01J0000000000000000000001",
+                "nama_lapak": "Lapak Contoh Sleman",
+                "saldo_tertahan_idr": 0,
+                "skor_fulfillment_persen": 95,
+                "slug": "lapak-contoh",
+                "status": "AKTIF"
+              }
+            ]
+          },
+          "contentType": "application/json",
+          "encoded": false
+        },
+        "headers": {
+          "Content-Type": [
+            "application/json"
+          ]
+        },
+        "matchingRules": {
+          "body": {
+            "$.data": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type",
+                  "min": 1
+                }
+              ]
+            },
+            "$.data[*].saldo_tertahan_idr": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "integer"
+                }
+              ]
+            },
+            "$.data[*].skor_fulfillment_persen": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "integer"
+                }
+              ]
+            },
+            "$.data[*].status": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "^(AKTIF|BEKU|TUTUP)$"
+                }
+              ]
+            }
+          }
+        },
+        "status": 200
+      },
+      "type": "Synchronous/HTTP"
+    },
+    {
+      "description": "daftar lapak tanpa token valid",
+      "pending": false,
+      "providerStates": [
+        {
+          "name": "token kedaluwarsa"
+        }
+      ],
+      "request": {
+        "headers": {
+          "Authorization": [
+            "Bearer token-uji"
+          ]
+        },
+        "method": "GET",
+        "path": "/web/lapak-saya"
+      },
+      "response": {
+        "body": {
+          "content": {
+            "kode": "AUTH_KEDALUWARSA",
+            "pesan": "Sesi berakhir."
+          },
+          "contentType": "application/json",
+          "encoded": false
+        },
+        "headers": {
+          "Content-Type": [
+            "application/json"
+          ]
+        },
+        "matchingRules": {
+          "body": {
+            "$.pesan": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          }
+        },
+        "status": 401
+      },
+      "type": "Synchronous/HTTP"
+    },
+    {
+      "description": "minta URL presigned",
+      "pending": false,
+      "providerStates": [
+        {
+          "name": "akun produsen terautentikasi"
+        }
+      ],
+      "request": {
+        "body": {
+          "content": {
+            "nama_berkas": "sambal-1.jpg",
+            "tipe_mime": "image/jpeg",
+            "ukuran_byte": 1200000
+          },
+          "contentType": "application/json",
+          "encoded": false
+        },
+        "headers": {
+          "Authorization": [
+            "Bearer token-uji"
+          ],
+          "Content-Type": [
+            "application/json"
+          ]
+        },
+        "method": "POST",
+        "path": "/web/media/presigned"
+      },
+      "response": {
+        "body": {
+          "content": {
+            "kedaluwarsa": "2026-10-21T12:00:00Z",
+            "media_url": "https://cdn.pasaree.example/foto/abc.jpg",
+            "unggah_url": "https://cdn.pasaree.example/put/abc"
+          },
+          "contentType": "application/json",
+          "encoded": false
+        },
+        "headers": {
+          "Content-Type": [
+            "application/json"
+          ]
+        },
+        "matchingRules": {
+          "body": {
+            "$.kedaluwarsa": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "format": "yyyy-MM-dd'T'HH:mm:ss'Z'",
+                  "match": "datetime"
+                }
+              ]
+            },
+            "$.media_url": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$.unggah_url": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          }
+        },
+        "status": 200
+      },
+      "type": "Synchronous/HTTP"
+    },
+    {
+      "description": "ubah draf, cek otomatis gagal",
+      "pending": false,
+      "providerStates": [
+        {
+          "name": "produk draf 01J0000000000000000000002 ada"
+        }
+      ],
+      "request": {
+        "body": {
+          "content": {
+            "judul": "Sambal"
+          },
+          "contentType": "application/json",
+          "encoded": false
+        },
+        "headers": {
+          "Authorization": [
+            "Bearer token-uji"
+          ],
+          "Content-Type": [
+            "application/json"
+          ]
+        },
+        "method": "PUT",
+        "path": "/web/produk/01J0000000000000000000002"
+      },
+      "response": {
+        "body": {
+          "content": {
+            "cek_otomatis": {
+              "kesalahan": [
+                {
+                  "kolom": "judul",
+                  "pesan": "Judul minimal 10 karakter."
+                }
+              ],
+              "lolos": false
+            },
+            "produk_id": "01J0000000000000000000002"
+          },
+          "contentType": "application/json",
+          "encoded": false
+        },
+        "headers": {
+          "Content-Type": [
+            "application/json"
+          ]
+        },
+        "matchingRules": {
+          "body": {
+            "$.cek_otomatis.kesalahan": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type",
+                  "min": 1
+                }
+              ]
+            }
+          }
+        },
+        "status": 200
+      },
+      "type": "Synchronous/HTTP"
+    }
+  ],
+  "metadata": {
+    "pact-js": {
+      "version": "17.1.4"
+    },
+    "pactRust": {
+      "ffi": "0.5.8",
+      "models": "1.3.16"
+    },
+    "pactSpecification": {
+      "version": "4.0"
+    }
+  },
+  "provider": {
+    "name": "pasaree-backend-service"
+  }
+}

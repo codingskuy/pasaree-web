@@ -91,22 +91,22 @@
 </script>
 
 <main>
-	<h1>Draf Produk</h1>
-	<p aria-live="polite" id="status-simpan">Status: {autosave?.status ?? status}</p>
+	<h1 id="draf-judul-halaman" data-testid="draf-judul-halaman">Draf Produk</h1>
+	<p aria-live="polite" id="status-simpan" data-testid="status-simpan">Status: {autosave?.status ?? status}</p>
 
 	<form onsubmit={(e) => { e.preventDefault(); void ajukan(); }}>
 		<label>Judul (10–80 karakter, memuat berat/isi)
-			<input bind:value={form.judul} aria-invalid={!!peta.judul} />
+			<input id="input-judul" data-testid="input-judul" bind:value={form.judul} aria-invalid={!!peta.judul} />
 		</label>
 		{#if peta.judul}<p class="galat" role="alert">{peta.judul}</p>{/if}
 
 		<label>Kategori
-			<select bind:value={form.kategori_kode} aria-invalid={!!peta.kategori_kode}>
+			<select id="pilih-kategori" data-testid="pilih-kategori" bind:value={form.kategori_kode} aria-invalid={!!peta.kategori_kode}>
 				<option value="">— pilih —</option>
 				{#each KATEGORI as k}<option value={k}>{k}</option>{/each}
 			</select>
 		</label>
-		{#if peta.kategori_kode}<p class="galat" role="alert">{peta.kategori_kode}</p>{/if}
+		{#if peta.kategori_kode}<p class="galat" role="alert" id="galat-kategori" data-testid="galat-kategori">{peta.kategori_kode}</p>{/if}
 
 		<fieldset>
 			<legend>Tag (maks {MAKS_TAG})</legend>
@@ -123,11 +123,12 @@
 		</fieldset>
 		{#if peta.tag}<p class="galat" role="alert">{peta.tag}</p>{/if}
 
-		<label>Deskripsi <textarea bind:value={form.deskripsi}></textarea></label>
-		<label>Komposisi <textarea bind:value={form.komposisi}></textarea></label>
+		<label>Deskripsi <textarea id="input-deskripsi" data-testid="input-deskripsi" bind:value={form.deskripsi}></textarea></label>
+		<label>Komposisi <textarea id="input-komposisi" data-testid="input-komposisi" bind:value={form.komposisi}></textarea></label>
 		{#if peta.komposisi}<p class="galat" role="alert">{peta.komposisi}</p>{/if}
 		<label>Alergen (pisahkan koma)
 			<input
+				id="input-alergen" data-testid="input-alergen"
 				value={form.alergen.join(', ')}
 				oninput={(e) => (form.alergen = e.currentTarget.value.split(',').map((s) => s.trim()).filter(Boolean))}
 			/>
@@ -137,22 +138,22 @@
 		{#each form.varian as v, i}
 			<fieldset>
 				<legend>Varian {i + 1}</legend>
-				<label>Nama <input bind:value={v.nama_varian} /></label>
-				<label>SKU <input bind:value={v.sku} /></label>
+				<label>Nama <input id="varian-{i}-nama" data-testid="varian-{i}-nama" bind:value={v.nama_varian} /></label>
+				<label>SKU <input id="varian-{i}-sku" data-testid="varian-{i}-sku" bind:value={v.sku} /></label>
 				{#if peta[`varian[${i}].sku`]}<p class="galat" role="alert">{peta[`varian[${i}].sku`]}</p>{/if}
-				<label>Harga (IDR, kelipatan 500) <input type="number" step="500" bind:value={v.harga_idr} /></label>
+				<label>Harga (IDR, kelipatan 500) <input id="varian-{i}-harga" data-testid="varian-{i}-harga" type="number" step="500" bind:value={v.harga_idr} /></label>
 				{#if peta[`varian[${i}].harga_idr`]}<p class="galat" role="alert">{peta[`varian[${i}].harga_idr`]}</p>{/if}
-				<label>Stok <input type="number" min="0" bind:value={v.stok} /></label>
+				<label>Stok <input id="varian-{i}-stok" data-testid="varian-{i}-stok" type="number" min="0" bind:value={v.stok} /></label>
 				<label>Satuan
 					<select bind:value={v.satuan}>{#each SATUAN as s}<option value={s}>{s}</option>{/each}</select>
 				</label>
-				<label>Berat kirim (g) <input type="number" min="1" bind:value={v.berat_kirim_gram} /></label>
+				<label>Berat kirim (g) <input id="varian-{i}-berat" data-testid="varian-{i}-berat" type="number" min="1" bind:value={v.berat_kirim_gram} /></label>
 			</fieldset>
 		{/each}
-		<button type="button" onclick={tambahVarian}>Tambah varian</button>
-		<button type="submit">Ajukan Kurasi</button>
+		<button type="button" id="tambah-varian" data-testid="tambah-varian" onclick={tambahVarian}>Tambah varian</button>
+		<button type="submit" id="ajukan-kurasi" data-testid="ajukan-kurasi">Ajukan Kurasi</button>
 	</form>
-	{#if pesan}<p role="status">{pesan}</p>{/if}
+	{#if pesan}<p role="status" id="pesan-hasil" data-testid="pesan-hasil">{pesan}</p>{/if}
 </main>
 
 <style>

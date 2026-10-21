@@ -10,3 +10,4 @@ Cara menambah ADR:
 Daftar:
 
 - [ADR-0001 — Fondasi teknis](./ADR-0001-fondasi-teknis.md)
+- [ADR-0002 — Governance branch dan PR](./ADR-0002-governance-branch-dan-pr.md)

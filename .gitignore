@@ -9,3 +9,5 @@ dist/
 
 # graphify
 graphify-out/
+contract/laporan/
+.schemathesis/

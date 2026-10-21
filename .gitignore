@@ -6,3 +6,6 @@ build/
 .env.*
 dist/
 .DS_Store
+
+# graphify
+graphify-out/

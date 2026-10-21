@@ -10,3 +10,4 @@ Cara menambah ADR:
 Daftar:
 
 - [ADR-0001 — Fondasi teknis](./ADR-0001-fondasi-teknis.md)
+- [ADR-0004 — Alur E2E web dengan Maestro](./ADR-0004-alur-e2e-maestro-web.md)
